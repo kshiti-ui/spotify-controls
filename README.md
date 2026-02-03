@@ -212,6 +212,7 @@ private static final String SCOPES = String.join(" ",
 
 - Built with [Fabric](https://fabricmc.net/)
 - Uses [Spotify Web API](https://developer.spotify.com/documentation/web-api)
+- claude.ai (for code)
 
 ## License
 
