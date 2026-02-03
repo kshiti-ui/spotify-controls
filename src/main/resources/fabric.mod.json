@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "spotifycontrols",
+  "version": "1.0.0",
+  "name": "Spotify Controls",
+  "description": "Control Spotify directly from Minecraft with commands",
+  "authors": [
+    "Kanhaiya"
+  ],
+  "contact": {
+    "homepage": "https://github.com/kshiti-ui/spotify-controls",
+    "sources": "https://github.com/kshiti-ui/spotify-controls"
+  },
+  "license": "MIT",
+  "icon": "assets/spotifycontrols/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.example.spotifycontrols.SpotifyControlsMod"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {}
+}
