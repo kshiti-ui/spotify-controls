@@ -23,8 +23,8 @@ public class SpotifyAuth {
     
     // IMPORTANT: Replace these with your own Spotify App credentials
     // Get them from: https://developer.spotify.com/dashboard
-    private static final String CLIENT_ID = "Client ID";
-    private static final String CLIENT_SECRET = "Client secret";
+    private static final String CLIENT_ID = "hidden";
+    private static final String CLIENT_SECRET = "hidden";
     // Using 127.0.0.1 instead of localhost per Spotify security requirements
     private static final String REDIRECT_URI = "http://127.0.0.1:8888/callback";
     private static final int PORT = 8888;

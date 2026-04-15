@@ -38,7 +38,7 @@ public class SpotifyControlsMod implements ClientModInitializer {
     private static int     tickCounter    = 0;
     private static final int CHECK_INTERVAL = 60;   // 3 seconds @ 20 tps
 
-    /* ── XP-bar progress (singleplayer only) ─────────────────────── */
+    /* ── XP-bar progress (both singleplayer & multiplayer) ──────────── */
     private static volatile float  currentProgress = -1f;   // -1 = not playing
     private static float           savedXpProgress = 0f;
     private static boolean         xpSaved         = false;
@@ -63,6 +63,9 @@ public class SpotifyControlsMod implements ClientModInitializer {
 
         // client commands — works in BOTH singleplayer & multiplayer
         SpotifyCommand.register();
+
+        // keyboard shortcuts for quick controls
+        SpotifyKeybinds.register();
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
         LOGGER.info("[SpotifyControls] Ready");
@@ -133,22 +136,20 @@ public class SpotifyControlsMod implements ClientModInitializer {
                 Text.literal(trackDisplayName));
     }
 
-    /* ── XP bar (singleplayer only) ───────────────────────────────── */
+    /* ── XP bar (works in both singleplayer & multiplayer) ──────────── */
     /**
-     * In singleplayer (integrated server present) we overwrite the
-     * client-local XP progress bar every tick to show song progress.
+     * We overwrite the client-local XP progress bar every tick to show song
+     * progress. This is PURELY client-side visual — the server never knows.
      * 
      * We ONLY touch experienceProgress (the bar fill 0.0-1.0).
      * We leave experienceLevel ALONE so the player's real level number
      * stays visible above the bar.
      *
-     * In multiplayer we skip entirely so real XP is never touched.
+     * Works in both singleplayer AND multiplayer — the XP bar is always
+     * client-side rendering, so we can safely override it.
      */
     private void updateXpBar(MinecraftClient client) {
         if (client.player == null) return;
-
-        // singleplayer = integrated server is non-null
-        if (client.getServer() == null) return;   // multiplayer → do nothing
 
         if (currentProgress < 0f) {
             restoreXp(client);

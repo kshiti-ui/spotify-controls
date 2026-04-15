@@ -1,6 +1,7 @@
 package com.example.spotifycontrols.command;
 
 import com.example.spotifycontrols.SpotifyControlsMod;
+import com.example.spotifycontrols.SpotifyKeybinds;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -39,13 +40,7 @@ public class SpotifyCommand {
                         .executes(SpotifyCommand::previous))
                 .then(ClientCommandManager.literal("loop")
                         .then(ClientCommandManager.argument("mode", StringArgumentType.word())
-                            .suggests((context, builder) -> {
-                                builder.suggest("track");
-                                builder.suggest("context");
-                                builder.suggest("off");
-                                return builder.buildFuture();
-                            })
-                            .executes(SpotifyCommand::loop)))
+                                .executes(SpotifyCommand::loop)))
                 .then(ClientCommandManager.literal("volume")
                         .then(ClientCommandManager.argument("percent", IntegerArgumentType.integer(0, 100))
                                 .executes(SpotifyCommand::volume)))
@@ -103,6 +98,7 @@ public class SpotifyCommand {
         if (!checkAuth(ctx)) return 0;
         run(ctx, () -> {
             SpotifyControlsMod.getSpotifyAPI().play();
+            SpotifyKeybinds.setPlayState(true);  // Sync keybind state
             sendChatMessage(ctx.getSource().getClient(), Text.literal("§a▶ Resumed"));
         }, "resume");
         return 1;
@@ -113,6 +109,7 @@ public class SpotifyCommand {
         String query = StringArgumentType.getString(ctx, "query");
         run(ctx, () -> {
             String info = SpotifyControlsMod.getSpotifyAPI().searchAndPlay(query);
+            SpotifyKeybinds.setPlayState(true);  // Sync keybind state
             if (info != null)
                 sendChatMessage(ctx.getSource().getClient(), Text.literal("§a♪ Now playing: §f" + info));
             else
@@ -126,6 +123,7 @@ public class SpotifyCommand {
         run(ctx, () -> {
             SpotifyControlsMod.getSpotifyAPI().pause();
             SpotifyControlsMod.notifyPaused();
+            SpotifyKeybinds.setPlayState(false);  // Sync keybind state
             sendChatMessage(ctx.getSource().getClient(), Text.literal("§e⏸ Paused"));
         }, "pause");
         return 1;
